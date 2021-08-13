@@ -1,0 +1,31 @@
+{
+  "name": "sdc-ratings-and-reviews",
+  "version": "1.0.0",
+  "description": "I have no words.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "node ./server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alex-richard-alisha/sdc-ratings-and-reviews.git"
+  },
+  "author": "Alisha Edington",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alex-richard-alisha/sdc-ratings-and-reviews/issues"
+  },
+  "homepage": "https://github.com/alex-richard-alisha/sdc-ratings-and-reviews#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.12",
+    "pg": "^8.7.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.24.0"
+  }
+}

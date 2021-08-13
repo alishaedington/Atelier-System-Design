@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 const pgPwd = require('../config');
 
-const connection = new Pool({
+const pool = new Pool({
   user: 'alishaedington',
   host: 'localhost',
   database: 'reviews',
@@ -14,4 +14,4 @@ const connection = new Pool({
 //   else { console.log('connected to DB'); }
 // });
 
-module.exports = connection;
+module.exports = pool;
