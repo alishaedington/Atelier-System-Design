@@ -9,9 +9,4 @@ const pool = new Pool({
   port: 5432,
 });
 
-// connection.connect((err) => {
-//   if (err) { console.log(err); }
-//   else { console.log('connected to DB'); }
-// });
-
 module.exports = pool;

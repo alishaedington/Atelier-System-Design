@@ -59,3 +59,5 @@ CREATE TABLE average AS SELECT characteristic_id, avg(value) FROM characteristic
 CREATE TABLE characteristic_meta AS SELECT average.avg, average.characteristic_id, characteristics.product_id, characteristics.name FROM average full JOIN characteristics ON average.characteristic_id = characteristics.id;
 
 SELECT reviews.id, reviews.rating, reviews.summary, reviews.recommend, reviews.response, reviews.body, reviews.date, reviews.reviewer_name, reviews.helpfulness, ARRAY(select row (review_photos.id, review_photos.url) from review_photos where review_photos.review_id = reviews.id) as photos from reviews where product_id = 2;
+
+SELECT reviews.id, reviews.rating, reviews.summary, reviews.recommend, reviews.response, reviews.body, reviews.date, reviews.reviewer_name, reviews.helpfulness, (select json_agg(review_photos) from (select review_photos.id, review_photos.url from review_photos where review_photos.review_id = reviews.id) as photos) from reviews where product_id = 2;
