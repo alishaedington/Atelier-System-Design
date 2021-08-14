@@ -28,8 +28,9 @@ const getReviewsMeta = async (request, response) => {
 
   try {
     client = await pool.connect();
-    const res = await client.query('', [product_id]);
-    console.log(res.rows);
+    const res = await client.query('select (select json_object_agg(rating, count) as ratings from rating_meta where product_id = $1), (select json_object_agg(recommend, count) as recommended from recommended_meta where product_id = $1), (select json_object_agg(name, characteristics) as characteristics from (select name, characteristic_id, round(avg, 2) from characteristic_meta where product_id = $1) as characteristics);', [product_id]);
+    res.rows[0].product_id = product_id;
+    response.send(res.rows[0]);
   } catch (e) {
     response.status(400).end();
   } finally {
