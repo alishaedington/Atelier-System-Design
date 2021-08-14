@@ -19,7 +19,7 @@ CREATE TABLE reviews (
   helpfulness INTEGER
 );
 
-COPY reviews FROM 'Users/alishaedington/work/SDC/SDC_files/reviews.csv' delimiter ',' csv header;
+COPY reviews FROM '/Users/alishaedington/work/SDC/SDC_files/reviews.csv' delimiter ',' csv header;
 
 CREATE TABLE review_photos (
   id INTEGER PRIMARY KEY,
@@ -28,7 +28,7 @@ CREATE TABLE review_photos (
   FOREIGN KEY(review_id) REFERENCES reviews(id)
 );
 
-COPY review_photos FROM 'Users/alishaedington/work/SDC/SDC_files/review_photos.csv' delimiter ',' csv header;
+COPY review_photos FROM '/Users/alishaedington/work/SDC/SDC_files/reviews_photos.csv' delimiter ',' csv header;
 
 CREATE TABLE characteristics (
   id INTEGER PRIMARY KEY,
@@ -36,7 +36,7 @@ CREATE TABLE characteristics (
   name TEXT
 );
 
-COPY characteristics FROM '.Users/alishaedington/work/SDC/SDC_files/characteristics.csv' delimiter ',' csv header;
+COPY characteristics FROM '/Users/alishaedington/work/SDC/SDC_files/characteristics.csv' delimiter ',' csv header;
 
 CREATE TABLE characteristic_reviews (
   id INTEGER PRIMARY KEY,
@@ -47,7 +47,7 @@ CREATE TABLE characteristic_reviews (
   FOREIGN KEY(characteristic_id) REFERENCES reviews(id)
 );
 
-COPY characteristic_reviews FROM 'Users/alishaedington/work/SDC/SDC_files/characteristic_reviews.csv' delimiter ',' csv header;
+COPY characteristic_reviews FROM '/Users/alishaedington/work/SDC/SDC_files/characteristic_reviews.csv' delimiter ',' csv header;
 
 
 create table rating_meta as select product_id, sum(case when rating=1 then 1 end) as "1", sum(case when rating=2 then 1 end) as "2", sum(case when rating=3 then 1 end) as "3", sum(case when rating=4 then 1 end) as "4", sum(case when rating=5 then 1 end) as "5" from reviews group by product_id;
@@ -57,7 +57,3 @@ CREATE TABLE recommended_meta AS select product_id, sum(case when recommend='t' 
 CREATE TABLE average AS SELECT characteristic_id, avg(value) FROM characteristic_reviews GROUP BY characteristic_id;
 
 CREATE TABLE characteristic_meta AS SELECT average.avg, average.characteristic_id, characteristics.product_id, characteristics.name FROM average full JOIN characteristics ON average.characteristic_id = characteristics.id;
-
-SELECT reviews.id, reviews.rating, reviews.summary, reviews.recommend, reviews.response, reviews.body, reviews.date, reviews.reviewer_name, reviews.helpfulness, ARRAY(select row (review_photos.id, review_photos.url) from review_photos where review_photos.review_id = reviews.id) as photos from reviews where product_id = 2;
-
-SELECT reviews.id, reviews.rating, reviews.summary, reviews.recommend, reviews.response, reviews.body, reviews.date, reviews.reviewer_name, reviews.helpfulness, (select json_agg(review_photos) from (select review_photos.id, review_photos.url from review_photos where review_photos.review_id = reviews.id) as photos) from reviews where product_id = 2;

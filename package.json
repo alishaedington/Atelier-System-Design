@@ -2,10 +2,9 @@
   "name": "sdc-ratings-and-reviews",
   "version": "1.0.0",
   "description": "I have no words.",
-  "main": "index.js",
   "scripts": {
     "test": "test",
-    "start": "node ./server/index.js"
+    "start": "nodemon server"
   },
   "repository": {
     "type": "git",
