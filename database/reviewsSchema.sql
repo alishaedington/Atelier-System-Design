@@ -73,10 +73,22 @@ select (select json_object_agg(rating, count) as ratings from rating_meta where 
 -- indexing
 
 CREATE INDEX idx_reviewPhoto_reviewId ON review_photos (review_id);
-CREATE INDEX idx_reviews_productId ON reviews (product_id);
-CREATE INDEX idx_rating_meta_productId ON rating_meta (product_id);
+
 CREATE INDEX idx_recommend_meta_productId ON recommended_meta (product_id);
-CREATE INDEX idx_characteristic_meta_productId ON characteristic_meta (product_id);
 CREATE INDEX idx_recMeta_all ON recommended_meta (id, product_id, recommend, count);
+
 CREATE INDEX idx_ratingMeta_all ON rating_meta (id, product_id, rating, count);
+CREATE INDEX idx_rating_meta_productId ON rating_meta (product_id);
+
+CREATE INDEX idx_characteristics_productId ON characteristics (product_id);
+
+CREATE INDEX idx_characteristic_reviews_charId ON characteristic_reviews (characteristic_id);
+CREATE INDEX idx_characteristic_reviews_reviewId ON characteristic_reviews (review_id);
+
+CREATE INDEX idx_characteristic_meta_productId ON characteristic_meta (product_id);
 CREATE INDEX idx_characteristic_meta_id ON characteristic_meta (id);
+
+CREATE INDEX idx_review_id ON reviews (id);
+CREATE INDEX idx_reviews_productId ON reviews (product_id);
+-- CREATE INDEX idx_reviews_all ON reviews (reported, helpfulness, date);
+
