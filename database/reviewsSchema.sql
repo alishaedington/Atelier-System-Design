@@ -68,7 +68,7 @@ CREATE TABLE characteristic_meta AS (
   GROUP BY characteristics.product_id, characteristics.name, characteristics.id
 );
 
-select (select json_object_agg(rating, count) as ratings from rating_meta where product_id = 2), (select json_object_agg(recommend, count) as recommended from recommended_meta where product_id = 2), (select json_object_agg(name, characteristics) as characteristics from (select name, id, round(avg, 2) from characteristic_meta where product_id = 2) as characteristics);
+select product_id, (select json_object_agg(rating, count) as ratings from rating_meta where product_id = 2), (select json_object_agg(recommend, count) as recommended from recommended_meta where product_id = 2), (select json_object_agg(name, characteristics) as characteristics from (select name, id, avg from characteristic_meta where product_id = 2) as characteristics) from rating_meta where product_id = 2;
 
 -- indexing
 
