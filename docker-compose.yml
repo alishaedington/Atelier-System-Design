@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  postgres:
+    image: sdc-postgres
+    container_name: sdc-postgres
+    ports:
+      - 3002:5432
+    environment:
+      POSTGRES_USER: alishaedington
+      POSTGRES_PASSWORD: alishaedington
+    build:
+      context: .
+      dockerfile: postgres.dockerfile
+  node:
+    image: sdc-node
+    container_name: sdc-node
+    ports:
+      - 3001:3000
+    build:
+      context: .
+      dockerfile: node.dockerfile

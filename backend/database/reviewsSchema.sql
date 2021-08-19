@@ -1,11 +1,11 @@
-DROP DATABASE IF EXISTS test;
+DROP DATABASE IF EXISTS reviews;
 
-CREATE DATABASE test;
+CREATE DATABASE reviews;
 
-\c test;
+\c reviews;
 
 CREATE TABLE reviews (
-  id INTEGER PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   product_id INTEGER NOT NULL,
   rating INTEGER NOT NULL,
   date BIGINT NOT NULL,
@@ -19,10 +19,6 @@ CREATE TABLE reviews (
   helpfulness INTEGER
 );
 
-COPY reviews FROM '/Users/alishaedington/work/SDC/SDC_files/reviews.csv' delimiter ',' csv header;
-
-SELECT pg_catalog.setval(pg_get_serial_sequence('reviews', 'id'), (SELECT MAX(id) FROM reviews)+1);
-
 CREATE TABLE review_photos (
   id SERIAL PRIMARY KEY,
   review_id INTEGER NOT NULL,
@@ -30,17 +26,12 @@ CREATE TABLE review_photos (
   FOREIGN KEY(review_id) REFERENCES reviews(id)
 );
 
-COPY review_photos FROM '/Users/alishaedington/work/SDC/SDC_files/reviews_photos.csv' delimiter ',' csv header;
-
-SELECT pg_catalog.setval(pg_get_serial_sequence('review_photos', 'id'), (SELECT MAX(id) FROM review_photos)+1);
-
 CREATE TABLE characteristics (
   id SERIAL PRIMARY KEY,
   product_id INTEGER NOT NULL,
   name TEXT
 );
 
-COPY characteristics FROM '/Users/alishaedington/work/SDC/SDC_files/characteristics.csv' delimiter ',' csv header;
 
 CREATE TABLE characteristic_reviews (
   id BIGSERIAL PRIMARY KEY,
@@ -51,10 +42,18 @@ CREATE TABLE characteristic_reviews (
   FOREIGN KEY(characteristic_id) REFERENCES reviews(id)
 );
 
-COPY characteristic_reviews FROM '/Users/alishaedington/work/SDC/SDC_files/characteristic_reviews.csv' delimiter ',' csv header;
+-- copying from csv files --
+COPY reviews FROM '/seed/reviews.csv' delimiter ',' csv header;
+COPY review_photos FROM '/seed/reviews_photos.csv' delimiter ',' csv header;
+COPY characteristics FROM '/seed/characteristics.csv' delimiter ',' csv header;
+COPY characteristic_reviews FROM '/seed/characteristic_reviews.csv' delimiter ',' csv header;
 
+-- resetting the serialization for imported tables --
+SELECT pg_catalog.setval(pg_get_serial_sequence('reviews', 'id'), (SELECT MAX(id) FROM reviews)+1);
+SELECT pg_catalog.setval(pg_get_serial_sequence('review_photos', 'id'), (SELECT MAX(id) FROM review_photos)+1);
 SELECT pg_catalog.setval(pg_get_serial_sequence('characteristic_reviews', 'id'), (SELECT MAX(id) FROM characteristic_reviews)+1);
 
+-- creating meta data tables --
 create table rating_meta as select product_id, rating, count(rating) from reviews group by product_id, rating;
 alter table rating_meta add column id serial primary key;
 
@@ -68,15 +67,25 @@ CREATE TABLE characteristic_meta AS (
   GROUP BY characteristics.product_id, characteristics.name, characteristics.id
 );
 
-select (select json_object_agg(rating, count) as ratings from rating_meta where product_id = 2), (select json_object_agg(recommend, count) as recommended from recommended_meta where product_id = 2), (select json_object_agg(name, characteristics) as characteristics from (select name, id, round(avg, 2) from characteristic_meta where product_id = 2) as characteristics);
-
 -- indexing
 
 CREATE INDEX idx_reviewPhoto_reviewId ON review_photos (review_id);
-CREATE INDEX idx_reviews_productId ON reviews (product_id);
-CREATE INDEX idx_rating_meta_productId ON rating_meta (product_id);
+
 CREATE INDEX idx_recommend_meta_productId ON recommended_meta (product_id);
-CREATE INDEX idx_characteristic_meta_productId ON characteristic_meta (product_id);
 CREATE INDEX idx_recMeta_all ON recommended_meta (id, product_id, recommend, count);
+
 CREATE INDEX idx_ratingMeta_all ON rating_meta (id, product_id, rating, count);
+CREATE INDEX idx_rating_meta_productId ON rating_meta (product_id);
+
+CREATE INDEX idx_characteristics_productId ON characteristics (product_id);
+
+CREATE INDEX idx_characteristic_reviews_charId ON characteristic_reviews (characteristic_id);
+CREATE INDEX idx_characteristic_reviews_reviewId ON characteristic_reviews (review_id);
+
+CREATE INDEX idx_characteristic_meta_productId ON characteristic_meta (product_id);
 CREATE INDEX idx_characteristic_meta_id ON characteristic_meta (id);
+
+CREATE INDEX idx_review_id ON reviews (id);
+CREATE INDEX idx_reviews_productId ON reviews (product_id);
+CREATE INDEX idx_reviews_all ON reviews (reported, helpfulness, date);
+
