@@ -4,7 +4,8 @@
   "description": "I have no words.",
   "scripts": {
     "test": "test",
-    "start": "nodemon server"
+    "start": "node server",
+    "start-dev": "nodemon server"
   },
   "repository": {
     "type": "git",
