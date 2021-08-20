@@ -1,6 +1,10 @@
 /* eslint-disable camelcase */
 const pool = require('../database/index');
 
+pool.connect()
+  .then(() => console.log('successfully connected'))
+  .catch(() => console.log('you are not connected, try again later.'));
+
 const getReviews = async (request, response) => {
   let {
     product_id, count, page, sort,
