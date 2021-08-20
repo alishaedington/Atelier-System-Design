@@ -9,4 +9,8 @@ const pool = new Pool({
   port: 3002,
 });
 
+pool.connect()
+  .then(() => console.log('successfully connected'))
+  .catch(() => console.log('you are not connected, try again later.'));
+
 module.exports = pool;
