@@ -1,8 +1,10 @@
 FROM postgres:latest
 
 RUN mkdir /seed/
-
-COPY /data/*.csv /seed/
+# path for ec2 instance
+COPY ./*.csv /seed/
+# path for local container
+# COPY /data/*.csv /seed/
 
 RUN chmod a+rx /seed
 

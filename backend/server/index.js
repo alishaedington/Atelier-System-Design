@@ -10,6 +10,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use('/reviews', router);
 
+app.get('/loaderio-cd147b6287330d187ac35365492131ce/', (req, res) => {
+  console.log(req);
+  res.send('loaderio-cd147b6287330d187ac35365492131ce');
+});
+
 app.listen(port, () => {
   console.log(`We be listening, port: ${port}`);
 });
