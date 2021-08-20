@@ -19,3 +19,11 @@ services:
     build:
       context: .
       dockerfile: node.dockerfile
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - 8080:8080
+    build:
+      context: .
+      dockerfile: nginx.dockerfile
