@@ -15,7 +15,7 @@ services:
     image: sdc-node
     container_name: sdc-node
     ports:
-      - 3001:3000
+      - 3000:3000
     build:
       context: .
       dockerfile: node.dockerfile
@@ -23,7 +23,7 @@ services:
     image: nginx
     container_name: nginx
     ports:
-      - 80:80
+      - 3000:3000
     build:
       context: .
       dockerfile: nginx.dockerfile
