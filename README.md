@@ -1,2 +1,2 @@
-# Atelier - RESTful API development - ratings and reviews
-API development for the ratings and reviews section of an online clothing retail site. 
+# Atelier: Database System Design, RESTful API
+Developed RESTful API and database for ratings and reviews of an inherited front-end E-Commerce codebase with over 25M records in CSVs
