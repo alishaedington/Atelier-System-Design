@@ -67,7 +67,7 @@ CREATE TABLE characteristic_meta AS (
   GROUP BY characteristics.product_id, characteristics.name, characteristics.id
 );
 
--- indexing
+-- indexing --
 
 CREATE INDEX idx_reviewPhoto_reviewId ON review_photos (review_id);
 
