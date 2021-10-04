@@ -21,8 +21,8 @@ node3)
     ;;
 
 node4)
-    scp -i SDC.pem ./init.sh ec2-user@ec2-3-129-62-202.us-east-2.compute.amazonaws.com:~/init.sh
-    ssh -i SDC.pem ec2-user@ec2-3-129-62-202.us-east-2.compute.amazonaws.com
+    scp -i SDC.pem ./init.sh ec2-user@:~/init.sh
+    ssh -i SDC.pem ec2-user@
     ;;
 
 nginx)
