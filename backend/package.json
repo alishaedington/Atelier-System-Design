@@ -1,9 +1,9 @@
 {
   "name": "sdc-ratings-and-reviews",
   "version": "1.0.0",
-  "description": "I have no words.",
+  "description": "Backend build of an inherited frontend e-commerce website with over 20M records in CSV's. This section deals with the ratings and reviews of the individual products that are for sale, and returns average ratings for any given characteristic and for the product overall.",
   "scripts": {
-    "test": "test",
+    "test": "jest --forceExit",
     "start": "node server",
     "start-dev": "nodemon server"
   },
@@ -26,6 +26,11 @@
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.24.0",
-    "nodemon": "^2.0.12"
+    "jest": "^27.3.1",
+    "nodemon": "^2.0.12",
+    "supertest": "^6.1.6"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }

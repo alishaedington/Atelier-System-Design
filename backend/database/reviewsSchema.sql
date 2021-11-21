@@ -42,18 +42,24 @@ CREATE TABLE characteristic_reviews (
   FOREIGN KEY(characteristic_id) REFERENCES reviews(id)
 );
 
--- copying from csv files --
+-- copying from csv files (deployed location) --
 COPY reviews FROM '/seed/reviews.csv' delimiter ',' csv header;
 COPY review_photos FROM '/seed/reviews_photos.csv' delimiter ',' csv header;
 COPY characteristics FROM '/seed/characteristics.csv' delimiter ',' csv header;
 COPY characteristic_reviews FROM '/seed/characteristic_reviews.csv' delimiter ',' csv header;
+
+-- copying from csv files (local location) --
+-- COPY reviews FROM '/Users/alishaedington/work/SDC/sdc-ratings-and-reviews/data/reviews.csv' delimiter ',' csv header;
+-- COPY review_photos FROM '/Users/alishaedington/work/SDC/sdc-ratings-and-reviews/data/reviews_photos.csv' delimiter ',' csv header;
+-- COPY characteristics FROM '/Users/alishaedington/work/SDC/sdc-ratings-and-reviews/data/characteristics.csv' delimiter ',' csv header;
+-- COPY characteristic_reviews FROM '/Users/alishaedington/work/SDC/sdc-ratings-and-reviews/data/characteristic_reviews.csv' delimiter ',' csv header;
 
 -- resetting the serialization for imported tables --
 SELECT pg_catalog.setval(pg_get_serial_sequence('reviews', 'id'), (SELECT MAX(id) FROM reviews)+1);
 SELECT pg_catalog.setval(pg_get_serial_sequence('review_photos', 'id'), (SELECT MAX(id) FROM review_photos)+1);
 SELECT pg_catalog.setval(pg_get_serial_sequence('characteristic_reviews', 'id'), (SELECT MAX(id) FROM characteristic_reviews)+1);
 
--- creating meta data tables --
+-- creating meta data tables for quicker querying --
 create table rating_meta as select product_id, rating, count(rating) from reviews group by product_id, rating;
 alter table rating_meta add column id serial primary key;
 
@@ -67,7 +73,7 @@ CREATE TABLE characteristic_meta AS (
   GROUP BY characteristics.product_id, characteristics.name, characteristics.id
 );
 
--- indexing --
+-- indexing tables for faster lookup --
 
 CREATE INDEX idx_reviewPhoto_reviewId ON review_photos (review_id);
 
@@ -89,3 +95,4 @@ CREATE INDEX idx_review_id ON reviews (id);
 CREATE INDEX idx_reviews_productId ON reviews (product_id);
 CREATE INDEX idx_reviews_all ON reviews (reported, helpfulness, date);
 
+/Users/alishaedington/work/SDC/sdc-ratings-and-reviews/data/characteristic_reviews.csv

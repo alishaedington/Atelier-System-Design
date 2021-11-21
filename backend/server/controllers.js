@@ -1,14 +1,14 @@
 /* eslint-disable camelcase */
 const pool = require('../database/index');
 
-pool.connect()
-  .then(() => console.log('successfully connected'))
-  .catch(() => console.log('you are not connected, try again later.'));
+// confirm connection to DB when deployed to ec2.
+// pool.connect()
+//   .then(() => console.log('successfully connected'))
+//   .catch(() => console.log('you are not connected, try again later.'));
 
 const getReviews = async (request, response) => {
-  let {
-    product_id, count, page, sort,
-  } = request.query;
+  const { product_id } = request.query;
+  let { count, page, sort } = request.query;
   // sort === 'relevant' ? sort = 'helpfulness' : sort = sort;
   if (sort === 'relavant' || sort === 'helpful') {
     sort = 'helpfulness';
@@ -22,7 +22,7 @@ const getReviews = async (request, response) => {
 
   try {
     client = await pool.connect();
-    const res = await client.query(`SELECT reviews.id, reviews.rating, reviews.summary, reviews.recommend, reviews.response, reviews.body, reviews.date, reviews.reviewer_name, reviews.helpfulness, (select coalesce(json_agg(photos), '[]'::json) as photos from (select review_photos.id, review_photos.url from review_photos where review_photos.review_id = reviews.id) as photos) from reviews where product_id = $1 AND reported = false order by $2 desc limit $3 offset $4;`, [product_id, sort, count, offset]);
+    const res = await client.query('SELECT reviews.id, reviews.rating, reviews.summary, reviews.recommend, reviews.response, reviews.body, reviews.date, reviews.reviewer_name, reviews.helpfulness, (select coalesce(json_agg(photos), "[]"::json) as photos from (select review_photos.id, review_photos.url from review_photos where review_photos.review_id = reviews.id) as photos) from reviews where product_id = $1 AND reported = false order by $2 desc limit $3 offset $4;', [product_id, sort, count, offset]);
     const resObj = {
       product: product_id,
       page,
