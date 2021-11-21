@@ -10,7 +10,7 @@ const report = async (request, response) => {
     await client.query('update reviews set reported = true where id = $1', [review_id]);
     response.sendStatus(204).end();
   } catch (e) {
-    response.sendStatus(400).end();
+    response.status(400).send(e);
   } finally {
     client.release();
   }

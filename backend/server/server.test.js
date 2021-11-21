@@ -55,3 +55,49 @@ describe('GET /reviews/meta', () => {
     expect(response.status).toBe(400);
   });
 });
+
+describe('PUT /reviews/:review_id/helpful', () => {
+
+  it('should increase helpfulness by one', async ()=>{
+    const beforeHelpful = await request(app).get('/reviews?product_id=1');
+    const initialHelpfulness = beforeHelpful.body.results[0].helpfulness;
+    const putResponse = await request(app).put('/reviews/2/helpful');
+    expect(putResponse.status).toBe(204)
+    const afterHelpful = await request(app).get('/reviews?product_id=1');
+    const currentHelpfulness = afterHelpful.body.results[0].helpfulness;
+    expect(currentHelpfulness).toBe(initialHelpfulness + 1);
+  });
+
+  it('should return status code 204 upon success', async ()=>{
+    const response = await request(app).put('/reviews/1/helpful');
+    expect(response.status).toBe(204);
+  });
+
+  it('should return status code 400 when incorrect params type passed in', async ()=>{
+    const response = await request(app).put('/reviews/hello/helpful');
+    expect(response.status).toBe(400);
+  });
+});
+
+describe('PUT /reviews/:review_id/report', () => {
+
+  it('should not display reported reviews', async ()=>{
+    const beforeReport = await request(app).get('/reviews?product_id=12&count=10');
+    const initialAmount = beforeReport.body.results.length;
+    const putResponse = await request(app).put('/reviews/16/report');
+    expect(putResponse.status).toBe(204)
+    const afterReport = await request(app).get('/reviews?product_id=12&count=10');
+    const currentAmount = afterReport.body.results.length;
+    expect(currentAmount).toBe(initialAmount - 1);
+  });
+
+  it('should return status code 204 upon success', async ()=>{
+    const response = await request(app).put('/reviews/74975/report');
+    expect(response.status).toBe(204);
+  });
+
+  it('should return status code 400 when incorrect params type passed in', async ()=>{
+    const response = await request(app).put('/reviews/hello/report');
+    expect(response.status).toBe(400);
+  });
+});
