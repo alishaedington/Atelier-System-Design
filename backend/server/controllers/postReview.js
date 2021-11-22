@@ -44,7 +44,7 @@ const postReview = async (request, response) => {
     response.sendStatus(201);
   } catch (e) {
     await client.query('ROLLBACK');
-    response.sendStatus(400).end();
+    response.status(400).send(e);
   } finally {
     client.release();
   }
