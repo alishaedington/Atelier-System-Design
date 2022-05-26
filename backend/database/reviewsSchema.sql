@@ -42,17 +42,11 @@ CREATE TABLE characteristic_reviews (
   FOREIGN KEY(characteristic_id) REFERENCES reviews(id)
 );
 
--- copying from csv files (deployed location) --
-COPY reviews FROM '/seed/reviews.csv' delimiter ',' csv header;
-COPY review_photos FROM '/seed/reviews_photos.csv' delimiter ',' csv header;
-COPY characteristics FROM '/seed/characteristics.csv' delimiter ',' csv header;
-COPY characteristic_reviews FROM '/seed/characteristic_reviews.csv' delimiter ',' csv header;
-
 -- copying from csv files (local location) --
--- COPY reviews FROM '/Users/alishaedington/work/SDC/sdc-ratings-and-reviews/data/reviews.csv' delimiter ',' csv header;
--- COPY review_photos FROM '/Users/alishaedington/work/SDC/sdc-ratings-and-reviews/data/reviews_photos.csv' delimiter ',' csv header;
--- COPY characteristics FROM '/Users/alishaedington/work/SDC/sdc-ratings-and-reviews/data/characteristics.csv' delimiter ',' csv header;
--- COPY characteristic_reviews FROM '/Users/alishaedington/work/SDC/sdc-ratings-and-reviews/data/characteristic_reviews.csv' delimiter ',' csv header;
+COPY reviews FROM '/Users/alishaedington/projects/Atelier-System-Design/seed/reviews_seed.csv' delimiter ',' csv header;
+COPY review_photos FROM '/Users/alishaedington/projects/Atelier-System-Design/seed/review_photos_seed.csv' delimiter ',' csv header;
+COPY characteristics FROM '/Users/alishaedington/projects/Atelier-System-Design/seed/characteristic_seed.csv' delimiter ',' csv header;
+COPY characteristic_reviews FROM '/Users/alishaedington/projects/Atelier-System-Design/seed/characteristic_reviews_seed.csv' delimiter ',' csv header;
 
 -- resetting the serialization for imported tables --
 SELECT pg_catalog.setval(pg_get_serial_sequence('reviews', 'id'), (SELECT MAX(id) FROM reviews)+1);
@@ -94,5 +88,3 @@ CREATE INDEX idx_characteristic_meta_id ON characteristic_meta (id);
 CREATE INDEX idx_review_id ON reviews (id);
 CREATE INDEX idx_reviews_productId ON reviews (product_id);
 CREATE INDEX idx_reviews_all ON reviews (reported, helpfulness, date);
-
-/Users/alishaedington/work/SDC/sdc-ratings-and-reviews/data/characteristic_reviews.csv

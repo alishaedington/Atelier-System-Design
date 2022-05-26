@@ -1,1 +1,3 @@
-module.exports = 'FILL_ME_IN';
+const postgresPassword = 'FILL_ME_IN'
+
+module.exports = postgresPassword;
